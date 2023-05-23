@@ -7,6 +7,8 @@ Reto para el modulo de react
 ```bash
 git clone https://github.com/wesvm/react-video-quiz.git
 
+cd react-video-quiz
+
 npm i
 npm run dev
 ```
