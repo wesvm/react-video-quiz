@@ -4,11 +4,9 @@ Reto para el modulo de react
 
 ## Instalación
 
----
+```bash
+git clone https://github.com/wesvm/react-video-quiz.git
 
-Para ejecutar este proyecto primero instala las dependencias y luego incia el server
-
-```
 npm i
 npm run dev
 ```
