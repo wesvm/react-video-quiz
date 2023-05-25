@@ -10,8 +10,8 @@ function App() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Question questions={data} />} />
-                <Route path="/vod/:questionId" element={
-                    <CameraRecorder questions={data} setQuestions={setData} />} />
+                <Route path="/vod/:questionId" element={<CameraRecorder questions={data}
+                    setQuestions={setData} />} />
             </Routes>
         </BrowserRouter>
 

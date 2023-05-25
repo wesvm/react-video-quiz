@@ -1,81 +1,59 @@
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ButtonsNextBack = ({ questionId, questions }) => {
-    const [selectedQuestion, setSelectedQuestion] = useState(
-        questions.find((question) => question.id === questionId));
+    const [selectedQuestionId, setSelectedQuestionId] = useState(questionId);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setSelectedQuestionId(questionId);
+    }, [questionId]);
 
     const handleNext = () => {
-        let nextQuestionId;
-        if (selectedQuestion.id < questions.length) {
-            nextQuestionId = selectedQuestion.id + 1;
-        } else {
-            nextQuestionId = 1;
-        }
-        const nextQuestion = questions.find(
-            (question) => question.id === nextQuestionId
-        );
-        if (nextQuestion) {
-            setSelectedQuestion(nextQuestion);
-        }
+        setSelectedQuestionId((prevId) => {
+            let nextId = prevId === questions.length ? 1 : prevId + 1;
+            while (nextId !== prevId) {
+                const nextQuestion = questions.find((question) => question.id === nextId);
+                if (!nextQuestion.vod) {
+                    navigate(`/vod/${nextId}`);
+                    return nextId;
+                }
+                nextId = nextId === questions.length ? 1 : nextId + 1;
+            }
+            return prevId;
+        });
     };
 
     const handleBack = () => {
-        let previousQuestionId;
-        if (selectedQuestion.id > 1) {
-            previousQuestionId = selectedQuestion.id - 1;
-        } else {
-            previousQuestionId = questions.length;
-        }
-        const previousQuestion = questions.find(
-            (question) => question.id === previousQuestionId
-        );
-        if (previousQuestion) {
-            setSelectedQuestion(previousQuestion);
-        }
+        setSelectedQuestionId((prevId) => {
+            let previousId = prevId === 1 ? questions.length : prevId - 1;
+            while (previousId !== prevId) {
+                const previousQuestion = questions.find((question) => question.id === previousId);
+                if (!previousQuestion.vod) {
+                    navigate(`/vod/${previousId}`);
+                    return previousId;
+                }
+                previousId = previousId === 1 ? questions.length : previousId - 1;
+            }
+            return prevId;
+        });
     };
 
-    if (!selectedQuestion) {
-        return <p>question not found</p>;
-    }
-
     return (
-
-        <div className="d-flex pt-2">
+        <div className="d-flex justify-content-center">
             <div className="pe-5">
-                {selectedQuestion.id > 1 ? (
-                    <Link to={`/vod/${selectedQuestion.id - 1}`} onClick={handleBack}>
-                        <Button variant="contained" startIcon={<ArrowBack />}>
-                            Back
-                        </Button>
-                    </Link>
-                ) : (
-                    <Link to={`/vod/${questions.length}`} onClick={handleBack}>
-                        <Button variant="contained" startIcon={<ArrowBack />}>
-                            Back
-                        </Button>
-                    </Link>
-                )}
+                <Button variant="contained" startIcon={<ArrowBack />} onClick={handleBack}>
+                    Back
+                </Button>
             </div>
             <div className="ps-5">
-                {selectedQuestion.id < questions.length ? (
-                    <Link to={`/vod/${selectedQuestion.id + 1}`} onClick={handleNext}>
-                        <Button variant="contained" endIcon={<ArrowForward />}>
-                            Next
-                        </Button>
-                    </Link>
-                ) : (
-                    <Link to={`/vod/1`} onClick={handleNext}>
-                        <Button variant="contained" endIcon={<ArrowForward />}>
-                            Next
-                        </Button>
-                    </Link>
-                )}
+                <Button variant="contained" endIcon={<ArrowForward />} onClick={handleNext}>
+                    Next
+                </Button>
             </div>
         </div>
-
     )
 }
 

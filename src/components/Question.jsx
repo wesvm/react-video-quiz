@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { Grid, Card, CardContent, IconButton, Button } from '@mui/material';
-import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 import { useRef } from 'react';
 import { FiberManualRecord } from '@mui/icons-material';
+import { Grid, Card, CardContent, IconButton, Button } from '@mui/material';
+import ReplayCircleFilledIcon from '@mui/icons-material/ReplayCircleFilled';
 
 const Question = ({ questions }) => {
 
@@ -16,11 +16,11 @@ const Question = ({ questions }) => {
     return (
         <div className='container'>
             <Grid container spacing={2} className='mt-3'>
-                {questions.map((question, index) => {
+                {questions?.map((question) => {
                     return (
                         <Grid item xs={12} md={3} key={question.id}>
-                            <Card sx={{ maxWidth: 345, height: 485 }} >
-                                <div>
+                            <Card sx={{ maxWidth: 345 }} className='h-auto'>
+                                <div className='d-flex align-items-center flex-column'>
                                     {question.vod ? (
                                         <>
                                             <video
@@ -30,10 +30,12 @@ const Question = ({ questions }) => {
                                                 height="300"
                                                 poster="https://t4.ftcdn.net/jpg/05/16/03/47/360_F_516034760_kWdE15pKthwDLjXBZwYUjBZpydCihUjO.jpg"
                                             />
-                                            <IconButton onClick={() => handlePlay(question.id)}
-                                                sx={{ color: 'black' }}>
-                                                <ReplayCircleFilledIcon sx={{ fontSize: 40 }} />
-                                            </IconButton>
+                                            <div>
+                                                <IconButton onClick={() => handlePlay(question.id)}
+                                                    sx={{ color: 'black' }}>
+                                                    <ReplayCircleFilledIcon sx={{ fontSize: 40 }} />
+                                                </IconButton>
+                                            </div>
 
                                         </>
                                     ) : (
@@ -46,7 +48,8 @@ const Question = ({ questions }) => {
                                 </div>
                                 <CardContent>
                                     <Link to={`/vod/${question.id}`}>
-                                        <Button variant='contained' startIcon={<FiberManualRecord />}>
+                                        <Button variant='contained'
+                                            startIcon={<FiberManualRecord />}>
                                             start recording
                                         </Button>
                                     </Link>
@@ -58,6 +61,11 @@ const Question = ({ questions }) => {
                 })}
 
             </Grid>
+            {questions.every((e) => e.vod != null) ? (
+                <Button variant="contained">
+                    Enviar respuestas
+                </Button>
+            ) : (null)}
         </div>
     );
 };
